@@ -9,18 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.gpetuhov.android.sampledragdroprecyclerview.recycler.interfaces.ItemTouchHelperAdapter;
-
 import java.util.Collections;
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
+public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-  private List<ItemModel> itemList;
+  private List<String> itemList;
   private OnItemClickListener itemClickListener;
   private final LayoutInflater layoutInflater;
 
-  public ItemAdapter(Context context, List<ItemModel> list) {
+  public ItemAdapter(Context context, List<String> list) {
     this.itemList = list;
     this.layoutInflater = LayoutInflater.from(context);
   }
@@ -35,7 +33,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
   @Override
   public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
     if (viewHolder instanceof VHItem) {
-      ((VHItem) viewHolder).text.setText(itemList.get(i).getText());
+      ((VHItem) viewHolder).text.setText(itemList.get(i));
     }
   }
 
@@ -44,7 +42,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     return itemList.size();
   }
 
-  public ItemModel getItem(int position) {
+  public String getItem(int position) {
     return itemList.get(position);
   }
 
@@ -56,14 +54,12 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     this.itemClickListener = mItemClickListener;
   }
 
-  @Override
   public void onItemDismiss(int position) {
     itemList.remove(position);
     notifyItemRemoved(position);
   }
 
-  @Override
-  public boolean onItemMove(int fromPosition, int toPosition) {
+  public void onItemMove(int fromPosition, int toPosition) {
     if (fromPosition < itemList.size() && toPosition < itemList.size()) {
       if (fromPosition < toPosition) {
         for (int i = fromPosition; i < toPosition; i++) {
@@ -76,7 +72,6 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
       }
       notifyItemMoved(fromPosition, toPosition);
     }
-    return true;
   }
 
   public class VHItem extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

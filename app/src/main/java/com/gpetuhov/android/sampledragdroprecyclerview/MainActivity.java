@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.EditItemTouchHelperCallback;
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.ItemAdapter;
-import com.gpetuhov.android.sampledragdroprecyclerview.recycler.ItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(mLayoutManager);
 
-    List<ItemModel> list = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
-      list.add(new ItemModel("Item " + i));
+    List<String> list = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+      list.add("Item " + i);
     }
 
     final ItemAdapter itemAdapter = new ItemAdapter(this, list);
     itemAdapter.setOnItemClickListener((view, position) ->
-      Toast.makeText(MainActivity.this, "Click on: " + itemAdapter.getItem(position).getText(), Toast.LENGTH_SHORT).show());
+      Toast.makeText(MainActivity.this, "Click on: " + itemAdapter.getItem(position), Toast.LENGTH_SHORT).show());
 
     ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(itemAdapter);
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
