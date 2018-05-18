@@ -9,14 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gpetuhov.android.sampledragdroprecyclerview.recycler.interfaces.ItemTouchHelperAdapter;
+
 import java.util.Collections;
 import java.util.List;
 
-public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
 
+  // In this simple example, the adapter contains just list of Strings
   private List<String> itemList;
   private OnItemClickListener itemClickListener;
   private final LayoutInflater layoutInflater;
+
+  public interface OnItemClickListener {
+    void onItemClick(View view, int position);
+  }
 
   public ItemAdapter(Context context, List<String> list) {
     this.itemList = list;
@@ -46,19 +53,19 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     return itemList.get(position);
   }
 
-  public interface OnItemClickListener {
-    void onItemClick(View view, int position);
-  }
-
   public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
     this.itemClickListener = mItemClickListener;
   }
 
+  // This is called, when item is removed
+  @Override
   public void onItemDismiss(int position) {
     itemList.remove(position);
     notifyItemRemoved(position);
   }
 
+  // This is called, when item is moved
+  @Override
   public void onItemMove(int fromPosition, int toPosition) {
     if (fromPosition < itemList.size() && toPosition < itemList.size()) {
       if (fromPosition < toPosition) {
@@ -74,6 +81,17 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
   }
 
+  // This is called, when item is dropped (item movement has stopped)
+  @Override
+  public void onItemDrop(RecyclerView.ViewHolder viewHolder) {
+    if (viewHolder instanceof VHItem) {
+      ((VHItem) viewHolder).onStopDrag();
+    }
+  }
+
+  // === ViewHolder ===
+  // Implements click listener to show toast on item click
+  // and long click listener to change item background color on start drag.
   public class VHItem extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     public TextView text;
 
@@ -93,6 +111,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public boolean onLongClick(View v) {
+      // On item long click set item's background to gray
       onStartDrag();
       return false;
     }
@@ -101,7 +120,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       itemView.setBackgroundColor(Color.LTGRAY);
     }
 
-    public void onStopDrag() {
+    // This is called, when drag is finished. Remove gray background
+    void onStopDrag() {
       itemView.setBackgroundColor(0);
     }
   }

@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(mLayoutManager);
 
+    // Fill list with dummy data
     List<String> list = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
       list.add("Item " + i);
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     itemAdapter.setOnItemClickListener((view, position) ->
       Toast.makeText(MainActivity.this, "Click on: " + itemAdapter.getItem(position), Toast.LENGTH_SHORT).show());
 
+    // These 3 lines enable item drag and swipe
     ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(itemAdapter);
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
     itemTouchHelper.attachToRecyclerView(recyclerView);
