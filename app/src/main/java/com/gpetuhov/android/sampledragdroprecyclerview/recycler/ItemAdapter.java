@@ -16,32 +16,20 @@ import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
 
-  private static final int TYPE_ITEM = 0;
-
   private List<ItemModel> itemList;
-  private OnItemClickListener mItemClickListener;
-  private final LayoutInflater mInflater;
+  private OnItemClickListener itemClickListener;
+  private final LayoutInflater layoutInflater;
 
   public ItemAdapter(Context context, List<ItemModel> list) {
     this.itemList = list;
-    this.mInflater = LayoutInflater.from(context);
+    this.layoutInflater = LayoutInflater.from(context);
   }
 
   @NonNull
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-    if (viewType == TYPE_ITEM) {
-      //inflate your layout and pass it to view holder
-      View v = mInflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
-      return new VHItem(v );
-    }
-
-    throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
-  }
-
-  @Override
-  public int getItemViewType(int position) {
-    return TYPE_ITEM;
+    View v = layoutInflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
+    return new VHItem(v);
   }
 
   @Override
@@ -65,7 +53,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
   }
 
   public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
-    this.mItemClickListener = mItemClickListener;
+    this.itemClickListener = mItemClickListener;
   }
 
   @Override
@@ -103,22 +91,22 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void onClick(View v) {
-      if (mItemClickListener != null) {
-        mItemClickListener.onItemClick(v, getPosition());
+      if (itemClickListener != null) {
+        itemClickListener.onItemClick(v, getLayoutPosition());
       }
     }
 
     @Override
     public boolean onLongClick(View v) {
-      setGrayBackground();
+      onStartDrag();
       return false;
     }
 
-    private void setGrayBackground() {
+    private void onStartDrag() {
       itemView.setBackgroundColor(Color.LTGRAY);
     }
 
-    public void resetBackground() {
+    public void onStopDrag() {
       itemView.setBackgroundColor(0);
     }
   }

@@ -45,7 +45,7 @@ public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
     super.clearView(recyclerView, viewHolder);
 
     if (viewHolder instanceof ItemAdapter.VHItem) {
-      ((ItemAdapter.VHItem) viewHolder).resetBackground();
+      ((ItemAdapter.VHItem) viewHolder).onStopDrag();
     }
   }
 }
