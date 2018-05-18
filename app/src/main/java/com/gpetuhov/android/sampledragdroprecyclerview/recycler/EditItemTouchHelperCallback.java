@@ -5,10 +5,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
-  private final ItemAdapter mAdapter;
+  private final ItemAdapter itemAdapter;
 
   public EditItemTouchHelperCallback(ItemAdapter adapter) {
-    mAdapter = adapter;
+    itemAdapter = adapter;
   }
 
   @Override
@@ -31,13 +31,21 @@ public class EditItemTouchHelperCallback extends ItemTouchHelper.Callback {
   @Override
   public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                         RecyclerView.ViewHolder target) {
-    mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+    itemAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
     return true;
   }
 
   @Override
   public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-    mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+    itemAdapter.onItemDismiss(viewHolder.getAdapterPosition());
   }
 
+  @Override
+  public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    super.clearView(recyclerView, viewHolder);
+
+    if (viewHolder instanceof ItemAdapter.VHItem) {
+      ((ItemAdapter.VHItem) viewHolder).resetBackground();
+    }
+  }
 }

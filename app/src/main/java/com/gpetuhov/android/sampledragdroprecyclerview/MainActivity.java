@@ -5,46 +5,41 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.widget.Toast;
 
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.EditItemTouchHelperCallback;
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.ItemAdapter;
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.ItemModel;
-import com.gpetuhov.android.sampledragdroprecyclerview.recycler.interfaces.OnStartDragListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnStartDragListener {
-
-  private RecyclerView mRecyclerView;
-  private ItemTouchHelper mItemTouchHelper;
+public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    mRecyclerView = findViewById(R.id.recycler_view);
+    RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-    mRecyclerView.setHasFixedSize(true);
+    recyclerView.setHasFixedSize(true);
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-    mRecyclerView.setLayoutManager(mLayoutManager);
+    recyclerView.setLayoutManager(mLayoutManager);
 
     List<ItemModel> list = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
       list.add(new ItemModel("Item " + i));
     }
 
-    ItemAdapter mAdapter = new ItemAdapter(this, list, this);
-    ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(mAdapter);
-    mItemTouchHelper = new ItemTouchHelper(callback);
-    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+    final ItemAdapter itemAdapter = new ItemAdapter(this, list);
+    itemAdapter.setOnItemClickListener((view, position) ->
+      Toast.makeText(MainActivity.this, "Click on: " + itemAdapter.getItem(position).getText(), Toast.LENGTH_SHORT).show());
 
-    mRecyclerView.setAdapter(mAdapter);
-  }
+    ItemTouchHelper.Callback callback = new EditItemTouchHelperCallback(itemAdapter);
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+    itemTouchHelper.attachToRecyclerView(recyclerView);
 
-  @Override
-  public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-    mItemTouchHelper.startDrag(viewHolder);
+    recyclerView.setAdapter(itemAdapter);
   }
 }
