@@ -1,5 +1,6 @@
 package com.gpetuhov.android.sampledragdroprecyclerview;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.EditItemTouchHelperCallback;
 import com.gpetuhov.android.sampledragdroprecyclerview.recycler.ItemAdapter;
+import com.gpetuhov.android.sampledragdroprecyclerview.recycler.SimpleItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +44,10 @@ public class MainActivity extends AppCompatActivity {
     itemTouchHelper.attachToRecyclerView(recyclerView);
 
     recyclerView.setAdapter(itemAdapter);
+
+    // Add dividers between items
+    SimpleItemDecoration dividerItemDecoration =
+      new SimpleItemDecoration(ContextCompat.getDrawable(this, R.drawable.divider));
+    recyclerView.addItemDecoration(dividerItemDecoration);
   }
 }
